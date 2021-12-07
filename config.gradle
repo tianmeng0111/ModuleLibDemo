@@ -1,0 +1,23 @@
+ext {
+    isRouterModule = false
+    aroute_api = '1.4.0'
+    aroute_compile = '1.2.1'
+    android = [
+            compileSdkVersion     : 30,
+            buildToolsVersion     : "30.0.0",
+            minSdkVersion         : 21,
+            targetSdkVersion      : 26,
+            applicationId         : "com.tm.modulelibdemo"
+    ]
+
+    dependencies = [
+            appcompat             : "androidx.appcompat:appcompat:1.1.0",
+            material              : "com.google.android.material:material:1.1.0",
+            constraintlayout      : "androidx.constraintlayout:constraintlayout:1.1.3",
+            navigation_fragment   : "androidx.navigation:navigation-fragment:2.2.2",
+            navigation_ui         : "androidx.navigation:navigation-ui:2.2.2",
+
+            arouter               : "com.alibaba:arouter-api:" + aroute_api,
+            aroute_compile        : "com.alibaba:arouter-compiler:" + aroute_compile,
+    ]
+}

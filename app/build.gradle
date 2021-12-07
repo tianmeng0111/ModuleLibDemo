@@ -1,0 +1,59 @@
+plugins {
+    id 'com.android.application'
+}
+
+def cfg = rootProject.ext.android
+def dep = rootProject.ext.dependencies
+
+android {
+    compileSdkVersion cfg.compileSdkVersion
+    buildToolsVersion cfg.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.tm.modulelibdemo"
+        minSdkVersion cfg.minSdkVersion
+        targetSdkVersion cfg.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation dep.appcompat
+    implementation dep.material
+    implementation dep.constraintlayout
+    implementation dep.navigation_fragment
+    implementation dep.navigation_ui
+
+    //arouter
+    implementation dep.arouter
+    implementation 'androidx.preference:preference:1.1.1'
+    annotationProcessor dep.aroute_compile
+//    kapt "com.alibaba:arouter-compiler:$aroute_compile"
+
+    implementation project(':provider')
+    if (!isRouterModule) {
+        implementation project(':router')
+    }
+}

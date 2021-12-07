@@ -1,0 +1,77 @@
+if (isRouterModule) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+
+def cfg = rootProject.ext.android
+def dep = rootProject.ext.dependencies
+
+android {
+    compileSdkVersion cfg.compileSdkVersion
+    buildToolsVersion cfg.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion cfg.minSdkVersion
+        targetSdkVersion cfg.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+
+            }
+        }
+    }
+
+    // 给 Module 内的资源名增加前缀, 避免资源名冲突，但此时包名不同可不写
+    if (isRouterModule) {
+        resourcePrefix "${project.name}_"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            if (isRouterModule) {
+                manifest.srcFile 'src/main/module/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                //集成开发模式下排除debug文件夹中的所有Java文件
+                java {
+                    exclude 'debug/**'
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+
+    implementation dep.appcompat
+    implementation dep.material
+    implementation dep.constraintlayout
+    implementation dep.navigation_fragment
+    implementation dep.navigation_ui
+
+    //arouter
+    implementation dep.arouter
+    annotationProcessor dep.aroute_compile
+//    kapt "com.alibaba:arouter-compiler:$aroute_compile"
+
+    implementation project(':provider')
+}
